@@ -1,0 +1,73 @@
+{
+  "courseImages": {
+    "data-analytics": "/images/courses/data-analytics.jpg",
+    "data-science": "/images/courses/data-science.jpg",
+    "data-engineering": "/images/courses/data-engineering.png",
+    "ai-engineering": "/images/courses/ai-engineering.jpg",
+    "ai-automation-agent-development": "/images/courses/ai-automation.jpg"
+  },
+  "branding": {
+    "logo": "/brand/datasphere-academy-logo.jpg"
+  },
+  "instructors": [
+    {
+      "name": "Ammar Jubril",
+      "title": "Founder & Lead Instructor",
+      "image": "/images/instructors/ammar-jubril-profile.jpg",
+      "publish": true
+    },
+    {
+      "name": "Chimobi Maxwell",
+      "image": "/images/instructors/chimobi-maxwell-placeholder.svg",
+      "publish": false,
+      "note": "Unverified details: review against instructor team image and get permission prior to publication"
+    },
+    {
+      "name": "Tobiloba Odukunle",
+      "image": "/images/instructors/tobiloba-odukunle-placeholder.svg",
+      "publish": false,
+      "note": "Unverified details: review against instructor team image and get permission prior to publication"
+    },
+    {
+      "name": "Teslim Olagoke",
+      "image": "/images/instructors/teslim-olagoke-placeholder.svg",
+      "publish": false,
+      "note": "Unverified details: review against instructor team image and get permission prior to publication"
+    },
+    {
+      "name": "Sodiq Adesina",
+      "image": "/images/instructors/sodiq-adesina-placeholder.svg",
+      "publish": false,
+      "note": "Unverified details: review against instructor team image and get permission prior to publication"
+    },
+    {
+      "name": "Agbons Ekata",
+      "image": "/images/instructors/agbons-ekata-placeholder.svg",
+      "publish": false,
+      "note": "Unverified details: review against instructor team image and get permission prior to publication"
+    },
+    {
+      "name": null,
+      "image": "/images/instructors/instructor-06-placeholder.svg",
+      "publish": false,
+      "note": "Unverified details: review against instructor team image and get permission prior to publication"
+    },
+    {
+      "name": null,
+      "image": "/images/instructors/instructor-07-placeholder.svg",
+      "publish": false,
+      "note": "Unverified details: review against instructor team image and get permission prior to publication"
+    },
+    {
+      "name": null,
+      "image": "/images/instructors/instructor-08-placeholder.svg",
+      "publish": false,
+      "note": "Unverified details: review against instructor team image and get permission prior to publication"
+    }
+  ],
+  "notes": [
+    "Use new course name AI Automation & Agent Development as a proposed title, subject to user approval. Preserve existing links/slug as aliases.",
+    "Image licensing/permission for supplied course artwork must be confirmed by the Academy before commercial public use.",
+    "Do not use AI mockup images as factual source data."
+  ]
+}

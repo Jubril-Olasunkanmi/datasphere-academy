@@ -1,0 +1,101 @@
+
+> datasphere-academy@1.0.0 dev
+> vite --host 0.0.0.0
+
+
+  VITE v6.4.6  ready in 1212 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://10.10.6.185:5173/
+  ➜  press h + enter to show help
+3:19:36 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:20:35 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:20:53 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:20:53 PM [vite] Internal server error: C:\Users\HP\Desktop\Datasphere Academy Website\src\App.tsx: Unexpected token, expected "}" (41:596)
+
+  39 | function PageHero({ eyebrow, title, intro }: { eyebrow: string; title: string; intro: string }) { return <section className="page-hero"><div className="container"><SectionLabel>{eyebrow}</SectionLabel><h1>{title}</h1><p>{intro}</p></div></section> }
+  40 |
+> 41 | function CourseDetail() { const { slug } = useParams(); const course = courses.find(c => c.slug === slug); if (!course) return <Navigate to="/courses" />; return <Layout><section className="detail-hero" style={{ '--course-color': course.color } as React.CSSProperties}><div className="container detail-grid"><div><Link className="back-link" to="/courses">← All programmes</Link><div className="detail-icon">{course.icon}</div><div className="eyebrow">{course.level} · {course.duration} · ONLINE</div><h1>{course.title}</h1><p>{course.description}</p><Link className="button primary" to={`/apply/${course.slug}`}>Register for {course.title} <ArrowRight size={17} /></Link></div><div className="price-panel"><span>Programme investment</span><strong>{formatNaira(course.offer ?? course.price)}</strong>{course.offer && <><s>{formatNaira(course.price)}</s><small>One-time payment offer</small><div className="installment">or 2 × {formatNaira(course.price / 2)} installments</div></>}<span className="next-cohort">Next cohort <b>{course.next}</b></span></div></div></section><section className="section"><div className="container detail-content"><div><SectionLabel>WHAT YOU’LL BUILD</SectionLabel><h2>From first principles<br />to <span>portfolio-ready.</span></h2><p className="lead">A structured, supportive learning journey with practical outcomes at every stage.</p><div className="module-list">{course.modules.map((m, i) => <div className="module" key={m}><span>{String(i + 1).padStart(2, '0')}</span><strong>{m}</strong><ChevronDown size={17} /></div>)}</div></div><aside><h3>Tools covered</h3><div className="tag-list">{course.tools.map(t => <span key={t}>{t}</span>)}</div><h3 className="aside-gap">Suggested capstones</h3><ul className="check-list">{course.projects.map(p => <li key={p}><Check size={16} />{p}</li>)}</ul><Link className="button dark-button full" to={`/apply/${course.slug}`}>Register for {course.title}</Link></aside></div></section></Layout> }
+     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^
+  42 |
+  43 | function About() { return <Layout><PageHero eyebrow="ABOUT DATASPHERE ACADEMY" title="Practical skills for a world that keeps moving." intro="Founded in 2023, Datasphere Academy is an online, instructor-led technology training academy for Nigerian and international learners." /><section className="section"><div className="container story-grid"><div><SectionLabel>OUR MISSION</SectionLabel><h2>Building skills.<br /><span>Developing global talent.</span></h2></div><div className="story-copy"><p>We equip aspiring and existing professionals with practical, industry-relevant technology skills through training delivered by experienced industry practitioners.</p><p>Our classrooms are designed for beginners, working professionals and career changers who want the confidence to build, explain and apply their knowledge in the real world.</p><div className="stat-row"><div><strong>2023</strong><span>Founded</span></div><div><strong>100+</strong><span>Learners trained</span></div><div><strong>5</strong><span>Core programmes</span></div></div></div></div></section><section className="section pale"><div className="container"><SectionLabel>THE DATASPHERE EXPERIENCE</SectionLabel><div className="experience-grid"><Feature icon={<Sparkles />} title="Clear, not crowded" text="We focus on the essential foundations and the repeated practice that makes them stick." /><Feature icon={<Users />} title="Human support" text="Our learning model combines live teaching, mentorship and a WhatsApp learning community." /><Feature icon={<BarChart3 />} title="Outcomes that travel" text="Build a portfolio that helps you communicate what you can do across local and global opportunities." /></div></div></section></Layout> }
+  44 |
+  Plugin: vite:react-babel
+  File: C:/Users/HP/Desktop/Datasphere Academy Website/src/App.tsx:41:596
+  39 |  function PageHero({ eyebrow, title, intro }: { eyebrow: string; title: string; intro: string }) { return <section className="page-hero"><div className="container"><SectionLabel>{eyebrow}</SectionLabel><h1>{title}</h1><p>{intro}</p></div></section> }
+  40 |  
+  41 |  function CourseDetail() { const { slug } = useParams(); const course = courses.find(c => c.slug === slug); if (!course) return <Navigate to="/courses" />; return <Layout><section className="detail-hero" style={{ '--course-color': course.color } as React.CSSProperties}><div className="container detail-grid"><div><Link className="back-link" to="/courses">← All programmes</Link><div className="detail-icon">{course.icon}</div><div className="eyebrow">{course.level} · {course.duration} · ONLINE</div><h1>{course.title}</h1><p>{course.description}</p><Link className="button primary" to={`/apply/${course.slug}`}>Register for {course.title} <ArrowRight size={17} /></Link></div><div className="price-panel"><span>Programme investment</span><strong>{formatNaira(course.offer ?? course.price)}</strong>{course.offer && <><s>{formatNaira(course.price)}</s><small>One-time payment offer</small><div className="installment">or 2 × {formatNaira(course.price / 2)} installments</div></>}<span className="next-cohort">Next cohort <b>{course.next}</b></span></div></div></section><section className="section"><div className="container detail-content"><div><SectionLabel>WHAT YOU’LL BUILD</SectionLabel><h2>From first principles<br />to <span>portfolio-ready.</span></h2><p className="lead">A structured, supportive learning journey with practical outcomes at every stage.</p><div className="module-list">{course.modules.map((m, i) => <div className="module" key={m}><span>{String(i + 1).padStart(2, '0')}</span><strong>{m}</strong><ChevronDown size={17} /></div>)}</div></div><aside><h3>Tools covered</h3><div className="tag-list">{course.tools.map(t => <span key={t}>{t}</span>)}</div><h3 className="aside-gap">Suggested capstones</h3><ul className="check-list">{course.projects.map(p => <li key={p}><Check size={16} />{p}</li>)}</ul><Link className="button dark-button full" to={`/apply/${course.slug}`}>Register for {course.title}</Link></aside></div></section></Layout> }
+     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ^
+  42 |  
+  43 |  function About() { return <Layout><PageHero eyebrow="ABOUT DATASPHERE ACADEMY" title="Practical skills for a world that keeps moving." intro="Founded in 2023, Datasphere Academy is an online, instructor-led technology training academy for Nigerian and international learners." /><section className="section"><div className="container story-grid"><div><SectionLabel>OUR MISSION</SectionLabel><h2>Building skills.<br /><span>Developing global talent.</span></h2></div><div className="story-copy"><p>We equip aspiring and existing professionals with practical, industry-relevant technology skills through training delivered by experienced industry practitioners.</p><p>Our classrooms are designed for beginners, working professionals and career changers who want the confidence to build, explain and apply their knowledge in the real world.</p><div className="stat-row"><div><strong>2023</strong><span>Founded</span></div><div><strong>100+</strong><span>Learners trained</span></div><div><strong>5</strong><span>Core programmes</span></div></div></div></div></section><section className="section pale"><div className="container"><SectionLabel>THE DATASPHERE EXPERIENCE</SectionLabel><div className="experience-grid"><Feature icon={<Sparkles />} title="Clear, not crowded" text="We focus on the essential foundations and the repeated practice that makes them stick." /><Feature icon={<Users />} title="Human support" text="Our learning model combines live teaching, mentorship and a WhatsApp learning community." /><Feature icon={<BarChart3 />} title="Outcomes that travel" text="Build a portfolio that helps you communicate what you can do across local and global opportunities." /></div></div></section></Layout> }
+      at constructor (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:369:19)
+      at TypeScriptParserMixin.raise (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:6632:19)
+      at TypeScriptParserMixin.unexpected (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:6652:16)
+      at TypeScriptParserMixin.readTemplateContinuation (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:6538:12)
+      at TypeScriptParserMixin.parseTemplate (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:8803:12)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:8352:21)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:4781:20)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:8068:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:8053:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:8033:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:13900:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7879:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7884:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7861:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:14109:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7809:21)
+      at TypeScriptParserMixin.tsParseMaybeAssign (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:13822:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:13732:19)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7757:23)
+      at C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7753:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:9436:12)
+      at TypeScriptParserMixin.parseExpression (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7753:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:4649:31)
+      at TypeScriptParserMixin.jsxParseAttributeValue (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:4621:21)
+      at TypeScriptParserMixin.jsxParseAttribute (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:4670:38)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:4684:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:14137:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:4679:17)
+      at TypeScriptParserMixin.jsxParseElementAt (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:4703:33)
+      at TypeScriptParserMixin.jsxParseElement (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:4766:17)
+      at TypeScriptParserMixin.parseExprAtom (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:4776:19)
+      at TypeScriptParserMixin.parseExprSubscripts (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:8068:23)
+      at TypeScriptParserMixin.parseUpdate (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:8053:21)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:8033:23)
+      at TypeScriptParserMixin.parseMaybeUnary (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:13900:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7879:61)
+      at TypeScriptParserMixin.parseExprOps (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7884:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7861:23)
+      at TypeScriptParserMixin.parseMaybeConditional (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:14109:20)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7809:21)
+      at C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:13811:39
+      at TypeScriptParserMixin.tryParse (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:6998:20)
+      at TypeScriptParserMixin.tsParseMaybeAssign (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:13811:18)
+      at TypeScriptParserMixin.parseMaybeAssign (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:13732:19)
+      at TypeScriptParserMixin.parseExpressionBase (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7757:23)
+      at C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7753:39
+      at TypeScriptParserMixin.allowInAnd (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:9431:16)
+      at TypeScriptParserMixin.parseExpression (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:7753:17)
+      at TypeScriptParserMixin.parseReturnStatement (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:10182:28)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\HP\Desktop\Datasphere Academy Website\node_modules\@babel\parser\lib\index.js:9825:21)
+3:21:10 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:22:10 PM [vite] (client) hmr update /src/extra.css
+3:24:56 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:25:41 PM [vite] (client) page reload src/main.tsx
+3:26:22 PM [vite] (client) hmr update /src/mobile.css
+3:53:48 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:53:48 PM [vite] (client) Pre-transform error: Failed to load url /src/data.ts (resolved id: C:/Users/HP/Desktop/Datasphere Academy Website/src/data.ts) in C:/Users/HP/Desktop/Datasphere Academy Website/src/App.tsx. Does the file exist?
+3:54:12 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:54:31 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:54:51 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:55:02 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:55:16 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:55:40 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:56:21 PM [vite] (client) page reload src/main.tsx
+3:56:55 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+3:58:50 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+8:55:28 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+8:56:06 PM [vite] (client) hmr update /src/update.css
+8:58:41 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+8:58:48 PM [vite] (client) hmr update /src/update.css
+8:59:14 PM [vite] (client) hmr update /src/App.tsx, /src/styles.css
