@@ -34,6 +34,7 @@ function Account() {
   const [session, setSession] = useState<any>(null)
   const [rows, setRows] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!supabase) return
@@ -64,7 +65,7 @@ function Account() {
             <h1>Welcome, {firstName}!</h1>
             <p>Your learning journey, registrations and payment updates in one place.</p>
           </div>
-          <button className="button ghost" onClick={() => supabase?.auth.signOut()}>Sign out</button>
+          <button className="button ghost" onClick={async () => { await supabase?.auth.signOut(); navigate('/') }}>Sign out</button>
         </div>
 
         <div className="account-layout">
