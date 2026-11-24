@@ -13,7 +13,7 @@ create table if not exists public.cohorts (
   registration_open date, registration_close date, created_at timestamptz not null default now()
 );
 create table if not exists public.applications (
-  id uuid primary key default gen_random_uuid(), reference text unique not null,
+  id uuid primary key default gen_random_uuid(), user_id uuid references auth.users(id) on delete set null, reference text unique not null,
   course_id uuid not null references public.courses(id), cohort_id uuid references public.cohorts(id),
   first_name text not null, last_name text not null, email text not null, phone text, whatsapp text,
   country text, city_state text, occupation text, experience_level text, laptop_os text,
