@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { ArrowRight, BarChart3, BookOpen, CalendarDays, Check, ChevronDown, Clock3, Database, Instagram, Linkedin, Mail, Menu, MessageCircle, Share2, ShieldCheck, Sparkles, Users, X } from 'lucide-react'
+import { ArrowRight, BarChart3, BookOpen, CalendarDays, Check, ChevronDown, Clock3, Database, Download, Instagram, Linkedin, Mail, Menu, MessageCircle, Share2, ShieldCheck, Sparkles, Users, X } from 'lucide-react'
 import { courses, formatNaira, type Course } from './data'
 import { supabase } from './lib/supabase'
 import './admin.css'
@@ -136,22 +136,39 @@ function Home() { return <Layout><main><AcademyHero />
   </main></Layout> }
 
 function Feature({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) { return <div className="feature"><div className="icon-box">{icon}</div><h3>{title}</h3><p>{text}</p></div> }
-async function shareCourse(course: Course) {
-  const url = `${window.location.origin}/courses/${course.slug}`
-  const shareData: ShareData = { title: course.title, text: `${course.title} — ${course.short}`, url }
-  try {
-    const imageResponse = await fetch(course.image)
-    const imageBlob = await imageResponse.blob()
-    const imageFile = new File([imageBlob], `${course.slug}.jpg`, { type: imageBlob.type || 'image/jpeg' })
-    if (navigator.share && navigator.canShare?.({ files: [imageFile] })) await navigator.share({ ...shareData, files: [imageFile] })
-    else if (navigator.share) await navigator.share(shareData)
-    else { await navigator.clipboard.writeText(url); window.alert('Course link copied. You can now share it with your network.') }
-  } catch (error) {
-    if ((error as Error).name !== 'AbortError') { await navigator.clipboard?.writeText(url); window.alert('Course link copied. You can now share it with your network.') }
-  }
+function roundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number) { ctx.beginPath(); ctx.roundRect(x, y, width, height, radius); ctx.closePath() }
+
+function drawWrappedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number, maxLines = 3) {
+  const words = text.split(' '); const lines: string[] = []; let line = ''
+  words.forEach(word => { const next = line ? `${line} ${word}` : word; if (ctx.measureText(next).width > maxWidth && line) { lines.push(line); line = word } else line = next })
+  if (line) lines.push(line)
+  lines.slice(0, maxLines).forEach((value, index) => ctx.fillText(value, x, y + index * lineHeight))
 }
 
-function CourseCard({ course }: { course: Course }) { const tools = course.tools.slice(0, 4); return <article className={`course-card premium-card card-${course.slug}`}><Link className="course-card-link" to={`/courses/${course.slug}`}><div className="course-image"><img src={course.image} alt="" /></div><div className="course-meta">{course.level} <span>·</span> {course.duration}</div><h3>{course.title}</h3><p>{course.short}</p><div className="card-tools">{tools.map(t => <TechLogo key={t} name={t} />)}</div><div className="card-footer"><span>{course.offer ? <><s>{formatNaira(course.price)}</s> <b>{formatNaira(course.offer)}</b></> : <b>{formatNaira(course.price)}</b>}</span><span className="register-link">Register <ArrowRight size={17} /></span></div></Link><button className="course-share-button" type="button" onClick={() => shareCourse(course)}><Share2 size={15} /> Share course</button></article> }
+async function createCourseShareCard(course: Course) {
+  const width = 1200; const height = 1500; const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d')!
+  const imageBlob = await (await fetch(course.image)).blob(); const image = await createImageBitmap(imageBlob)
+  const background = ctx.createLinearGradient(0, 0, width, height); background.addColorStop(0, '#071f3a'); background.addColorStop(1, '#126f9f'); ctx.fillStyle = background; ctx.fillRect(0, 0, width, height)
+  ctx.fillStyle = '#70c9d4'; ctx.font = '700 32px Arial'; ctx.fillText('DATASPHERE ACADEMY', 76, 92)
+  ctx.fillStyle = '#ffffff'; ctx.font = '700 20px Arial'; ctx.fillText('LIVE · PRACTICAL · ONLINE', 76, 137)
+  roundedRect(ctx, 60, 185, 1080, 570, 28); ctx.save(); ctx.clip(); const imageScale = Math.max(1080 / image.width, 570 / image.height); const imageWidth = image.width * imageScale; const imageHeight = image.height * imageScale; ctx.drawImage(image, 60 + (1080 - imageWidth) / 2, 185 + (570 - imageHeight) / 2, imageWidth, imageHeight); ctx.restore()
+  ctx.fillStyle = '#ffffff'; ctx.font = '700 68px Arial'; drawWrappedText(ctx, course.title, 76, 875, 1048, 78, 2)
+  ctx.fillStyle = '#bce9ef'; ctx.font = '400 31px Arial'; drawWrappedText(ctx, course.short, 76, 1050, 1048, 45, 2)
+  ctx.fillStyle = '#ffffff'; ctx.font = '700 28px Arial'; ctx.fillText(`${course.level}  ·  ${course.duration}  ·  Starts ${course.next}`, 76, 1175)
+  ctx.fillStyle = '#9eeaf2'; ctx.font = '700 42px Arial'; ctx.fillText(formatNaira(course.offer ?? course.price), 76, 1270)
+  ctx.fillStyle = '#ffffff'; ctx.font = '700 30px Arial'; ctx.fillText('REGISTER NOW →', 76, 1360)
+  ctx.fillStyle = '#c4e6ee'; ctx.font = '400 22px Arial'; ctx.fillText(`${window.location.origin}/courses/${course.slug}`, 76, 1420)
+  return new Promise<Blob>((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Could not create share card')), 'image/png'))
+}
+
+async function shareCourse(course: Course) {
+  const url = `${window.location.origin}/courses/${course.slug}`; const shareData: ShareData = { title: course.title, text: `${course.title} — ${course.short}`, url }
+  try { const cardBlob = await createCourseShareCard(course); const cardFile = new File([cardBlob], `${course.slug}-share-card.png`, { type: 'image/png' }); if (navigator.share && navigator.canShare?.({ files: [cardFile] })) await navigator.share({ ...shareData, files: [cardFile] }); else if (navigator.share) await navigator.share(shareData); else { await navigator.clipboard.writeText(url); window.alert('Course link copied. You can now share it with your network.') } } catch (error) { if ((error as Error).name !== 'AbortError') { await navigator.clipboard?.writeText(url); window.alert('Course link copied. You can now share it with your network.') } }
+}
+
+async function downloadCourseCard(course: Course) { const blob = await createCourseShareCard(course); const anchor = document.createElement('a'); anchor.href = URL.createObjectURL(blob); anchor.download = `${course.slug}-share-card.png`; anchor.click(); URL.revokeObjectURL(anchor.href) }
+
+function CourseCard({ course }: { course: Course }) { const tools = course.tools.slice(0, 4); return <article className={`course-card premium-card card-${course.slug}`}><Link className="course-card-link" to={`/courses/${course.slug}`}><div className="course-image"><img src={course.image} alt="" /></div><div className="course-meta">{course.level} <span>·</span> {course.duration}</div><h3>{course.title}</h3><p>{course.short}</p><div className="card-tools">{tools.map(t => <TechLogo key={t} name={t} />)}</div><div className="card-footer"><span>{course.offer ? <><s>{formatNaira(course.price)}</s> <b>{formatNaira(course.offer)}</b></> : <b>{formatNaira(course.price)}</b>}</span><span className="register-link">Register <ArrowRight size={17} /></span></div></Link><div className="course-card-actions"><button className="course-share-button" type="button" onClick={() => shareCourse(course)}><Share2 size={15} /> Share course</button><button className="course-share-button" type="button" onClick={() => downloadCourseCard(course)}><Download size={15} /> Download card</button></div></article> }
 
 function Courses() { const [filter, setFilter] = useState('All programmes'); const list = filter === 'All programmes' ? courses : courses.filter(c => c.title.includes(filter)); return <Layout><PageHero eyebrow="THE ACADEMY CATALOGUE" title="Build the skills the future is asking for." intro="Five practical programmes. One clear goal: help you do meaningful work with technology." /><section className="section"><div className="container"><div className="filters">{['All programmes', 'Data', 'AI'].map(f => <button key={f} className={filter === f ? 'selected' : ''} onClick={() => setFilter(f)}>{f}</button>)}</div><div className="course-grid catalog">{list.map(c => <CourseCard key={c.slug} course={c} />)}</div><div className="info-callout"><Clock3 /><div><strong>Weekend learning, made clear.</strong><p>Classes run Saturdays 10:00 AM–1:00 PM and Sundays 4:00 PM–6:30 PM, Africa/Lagos (UTC+1). Course-specific overrides are shown on each programme page.</p></div></div></div></section></Layout> }
 
