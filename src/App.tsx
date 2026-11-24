@@ -146,19 +146,25 @@ function drawWrappedText(ctx: CanvasRenderingContext2D, text: string, x: number,
 }
 
 async function createCourseShareCard(course: Course) {
-  const width = 1200; const height = 1500; const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d')!
+  const width = 1024; const height = 1024; const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d')!
   const imageBlob = await (await fetch(course.image)).blob(); const image = await createImageBitmap(imageBlob)
-  ctx.fillStyle = '#edf3f4'; ctx.fillRect(0, 0, width, height)
-  roundedRect(ctx, 30, 30, 1140, 1440, 28); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.save(); roundedRect(ctx, 30, 30, 1140, 560, 28); ctx.clip(); const imageScale = Math.max(1140 / image.width, 560 / image.height); const imageWidth = image.width * imageScale; const imageHeight = image.height * imageScale; ctx.drawImage(image, 30 + (1140 - imageWidth) / 2, 30 + (560 - imageHeight) / 2, imageWidth, imageHeight); ctx.restore()
-  ctx.fillStyle = '#738795'; ctx.font = '700 25px Arial'; ctx.fillText(`${course.level.toUpperCase()}  ·  ${course.duration.toUpperCase()}`, 78, 680)
-  ctx.fillStyle = '#193d62'; ctx.font = '500 62px Arial'; drawWrappedText(ctx, course.title, 78, 785, 1045, 72, 2)
-  ctx.fillStyle = '#71828b'; ctx.font = '400 31px Arial'; drawWrappedText(ctx, course.short, 78, 920, 1045, 44, 2)
-  let chipX = 78; const chipY = 1015; course.tools.slice(0, 4).forEach(tool => { ctx.font = '700 22px Arial'; const chipWidth = ctx.measureText(tool).width + 64; roundedRect(ctx, chipX, chipY, chipWidth, 54, 7); ctx.fillStyle = '#eef5f6'; ctx.fill(); ctx.fillStyle = '#506d7d'; ctx.fillText(tool, chipX + 30, chipY + 35); chipX += chipWidth + 14 })
-  ctx.strokeStyle = '#e3eaec'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(78, 1120); ctx.lineTo(1122, 1120); ctx.stroke()
-  if (course.offer) { ctx.fillStyle = '#8a979b'; ctx.font = '400 29px Arial'; ctx.fillText(formatNaira(course.price), 78, 1200); ctx.strokeStyle = '#8a979b'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(78, 1185); ctx.lineTo(78 + ctx.measureText(formatNaira(course.price)).width, 1185); ctx.stroke() }
-  ctx.fillStyle = '#193d62'; ctx.font = '700 32px Arial'; ctx.fillText(formatNaira(course.offer ?? course.price), course.offer ? 285 : 78, 1200)
-  ctx.fillStyle = '#193d62'; ctx.font = '700 30px Arial'; ctx.fillText('Register  →', 900, 1200)
-  const shareGradient = ctx.createLinearGradient(70, 1260, 1130, 1415); shareGradient.addColorStop(0, '#0b3760'); shareGradient.addColorStop(1, '#075eb2'); roundedRect(ctx, 70, 1260, 1060, 155, 24); ctx.fillStyle = shareGradient; ctx.fill(); ctx.fillStyle = '#ffffff'; ctx.font = '700 38px Arial'; ctx.fillText('Share course', 230, 1325); ctx.fillStyle = '#a8eaf3'; ctx.font = '400 25px Arial'; ctx.fillText('Invite others to learn with you', 230, 1365); ctx.font = '700 52px Arial'; ctx.fillText('→', 1035, 1355); ctx.fillStyle = '#70c9d4'; ctx.font = '700 24px Arial'; ctx.fillText(`Starts ${course.next}`, 78, 1450)
+  const background = ctx.createLinearGradient(0, 0, width, height); background.addColorStop(0, '#061b43'); background.addColorStop(.58, '#06366b'); background.addColorStop(1, '#071b45'); ctx.fillStyle = background; ctx.fillRect(0, 0, width, height)
+  const wave = (y: number, color: string, offset: number) => { ctx.beginPath(); ctx.moveTo(-80, y + 45); ctx.bezierCurveTo(180, y - 100 + offset, 370, y + 100 + offset, 620, y - 50 + offset); ctx.bezierCurveTo(820, y - 160 + offset, 900, y + 30 + offset, 1100, y - 90 + offset); ctx.lineTo(1100, y + 20 + offset); ctx.bezierCurveTo(860, y + 150 + offset, 760, y - 10 + offset, 580, y + 55 + offset); ctx.bezierCurveTo(330, y + 150 + offset, 150, y - 15 + offset, -80, y + 120 + offset); ctx.closePath(); ctx.fillStyle = color; ctx.fill() }
+  wave(0, '#147ce866', 0); wave(760, '#0dc9f066', 0); wave(820, '#4428d766', 30)
+  ctx.fillStyle = '#59d9eb'; ctx.fillRect(57, 55, 10, 24); ctx.fillRect(73, 45, 10, 34); ctx.fillRect(89, 34, 10, 45); ctx.fillStyle = '#ffffff'; ctx.font = '700 25px Arial'; ctx.fillText('Datasphere', 111, 55); ctx.fillText('Academy', 111, 82)
+  roundedRect(ctx, 690, 40, 270, 48, 24); ctx.strokeStyle = '#76cfe8'; ctx.lineWidth = 1; ctx.stroke(); ctx.fillStyle = '#d9f4fa'; ctx.font = '700 16px Arial'; ctx.fillText('▣  •  Live Online Training', 714, 70)
+  ctx.fillStyle = '#42d9ed'; ctx.font = '700 18px Arial'; ctx.fillText('NEW COHORT', 58, 145); ctx.fillRect(185, 137, 58, 3)
+  ctx.fillStyle = '#ffffff'; ctx.font = '700 62px Arial'; drawWrappedText(ctx, course.title.replace(' & Agent Development', ''), 58, 220, 470, 66, 2)
+  ctx.fillStyle = '#a8e9f1'; ctx.font = '400 23px Arial'; drawWrappedText(ctx, course.short, 58, 355, 470, 32, 3)
+  roundedRect(ctx, 535, 145, 430, 300, 26); ctx.save(); ctx.clip(); const imageScale = Math.max(430 / image.width, 300 / image.height); const imageWidth = image.width * imageScale; const imageHeight = image.height * imageScale; ctx.drawImage(image, 535 + (430 - imageWidth) / 2, 145 + (300 - imageHeight) / 2, imageWidth, imageHeight); ctx.restore(); ctx.fillStyle = '#ffffff22'; ctx.fillRect(535, 145, 430, 300)
+  let chipX = 58; const chipY = 430; course.tools.slice(0, 4).forEach(tool => { ctx.font = '700 16px Arial'; const chipWidth = ctx.measureText(tool).width + 45; roundedRect(ctx, chipX, chipY, chipWidth, 39, 19); ctx.strokeStyle = '#76d9ee'; ctx.lineWidth = 1; ctx.stroke(); ctx.fillStyle = '#f0fbff'; ctx.fillText(tool, chipX + 22, chipY + 25); chipX += chipWidth + 10 })
+  ctx.strokeStyle = '#55cfe866'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(58, 505); ctx.lineTo(965, 505); ctx.stroke()
+  const stat = (x: number, label: string, value: string) => { ctx.fillStyle = '#8bdbea'; ctx.font = '400 14px Arial'; ctx.fillText(label, x, 545); ctx.fillStyle = '#ffffff'; ctx.font = '700 20px Arial'; ctx.fillText(value, x, 571) }
+  stat(58, 'Duration', course.duration); stat(275, 'Level', course.level); stat(500, 'Start Date', course.next)
+  ctx.fillStyle = '#9eb6ce'; ctx.font = '400 24px Arial'; if (course.offer) { ctx.fillText(formatNaira(course.price), 58, 665); ctx.strokeStyle = '#9eb6ce'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(58, 654); ctx.lineTo(58 + ctx.measureText(formatNaira(course.price)).width, 654); ctx.stroke() }
+  ctx.fillStyle = '#b8f5fa'; ctx.font = '700 30px Arial'; ctx.fillText(formatNaira(course.offer ?? course.price), course.offer ? 185 : 58, 665)
+  roundedRect(ctx, 595, 618, 365, 66, 33); const buttonGradient = ctx.createLinearGradient(595, 618, 960, 684); buttonGradient.addColorStop(0, '#a9eff5'); buttonGradient.addColorStop(1, '#15bde8'); ctx.fillStyle = buttonGradient; ctx.fill(); ctx.fillStyle = '#031b43'; ctx.font = '700 22px Arial'; ctx.fillText('Register Now  →', 655, 660)
+  ctx.fillStyle = '#8edfec'; ctx.font = '400 15px Arial'; ctx.fillText('datasphere-academy-site.pages.dev/courses/' + course.slug, 58, 950)
   return new Promise<Blob>((resolve, reject) => canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Could not create share card')), 'image/png'))
 }
 
