@@ -27,9 +27,33 @@ Deno.serve(async request => {
     const recentCutoff = new Date(Date.now() - 10 * 60 * 1000).toISOString()
     const { data: recent } = await admin.from('enquiries').select('id').eq('kind', 'private_training').eq('email', email).gte('created_at', recentCutoff).limit(1)
     if (recent?.length) return json({ error: 'A recent request is already being reviewed for this email address.' }, 429)
-    const { error } = await admin.from('enquiries').insert({ kind: 'private_training', name, email, whatsapp: text(body.whatsapp, 50), country, pathway, experience_level: experienceLevel, learning_goal: learningGoal, city_timezone: text(body.cityTimezone, 100), preferred_times: text(body.preferredTimes, 180), intended_start_date: text(body.intendedStartDate, 20) || null, portfolio_url: text(body.portfolioUrl, 500), extra_details: text(body.extraDetails, 3000), message: learningGoal, consent_at: new Date().toISOString() })
+    const whatsapp = text(body.whatsapp, 50)
+    const cityTimezone = text(body.cityTimezone, 100)
+    const preferredTimes = text(body.preferredTimes, 180)
+    const intendedStartDate = text(body.intendedStartDate, 20)
+    const portfolioUrl = text(body.portfolioUrl, 500)
+    const extraDetails = text(body.extraDetails, 3000)
+    const { error } = await admin.from('enquiries').insert({ kind: 'private_training', name, email, whatsapp, country, pathway, experience_level: experienceLevel, learning_goal: learningGoal, city_timezone: cityTimezone, preferred_times: preferredTimes, intended_start_date: intendedStartDate || null, portfolio_url: portfolioUrl, extra_details: extraDetails, message: learningGoal, consent_at: new Date().toISOString() })
     if (error) return json({ error: 'We could not save your request.' }, 500)
-    return json({ ok: true })
+    const resendKey = Deno.env.get('RESEND_API_KEY')
+    const fromEmail = Deno.env.get('FROM_EMAIL')
+    const notificationEmail = Deno.env.get('PRIVATE_TRAINING_NOTIFICATION_EMAIL')
+    let notificationSent = false
+    if (resendKey && fromEmail && notificationEmail) {
+      const notification = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: fromEmail,
+          to: [notificationEmail],
+          reply_to: email,
+          subject: `New private training request from ${name}`,
+          text: [`Name: ${name}`, `Email: ${email}`, `WhatsApp: ${whatsapp || 'Not provided'}`, `Country: ${country}`, `Pathway: ${pathway}`, `Experience: ${experienceLevel}`, `Learning goal: ${learningGoal}`, `City / timezone: ${cityTimezone || 'Not provided'}`, `Preferred times: ${preferredTimes || 'Not provided'}`, `Intended start date: ${intendedStartDate || 'Flexible'}`, `Portfolio: ${portfolioUrl || 'Not provided'}`, `Additional details: ${extraDetails || 'Not provided'}`].join('\n')
+        })
+      })
+      notificationSent = notification.ok
+    }
+    return json({ ok: true, notification_configured: Boolean(resendKey && fromEmail && notificationEmail), notification_sent: notificationSent })
   } catch {
     return json({ error: 'Invalid request.' }, 400)
   }
